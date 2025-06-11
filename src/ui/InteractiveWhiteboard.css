@@ -1,0 +1,84 @@
+.widget-interactivewhiteboard-clickable {
+    cursor: pointer;
+}
+
+.widget-interactivewhiteboard {
+    display: inline-block;
+}
+
+.widget-interactivewhiteboard.badge:empty {
+    display: initial;
+    /* Fix padding to stay round */
+    padding: 3px 10px;
+}
+
+.widget-interactivewhiteboard.label:empty {
+    display: initial;
+    /* Fix padding to stay square */
+    padding: .2em .8em .3em;
+}
+
+.widget-interactivewhiteboard.badge {
+    min-width: 18px;
+    min-height: 18px;
+}
+
+.canvas-body {
+	border: 1px solid black;
+}
+
+.whiteboard_border_thin {
+	border: 1px solid;
+}
+
+.whiteboard_border_medium {
+	border: 3px solid;
+}
+
+
+.whiteboard_border_thick {
+	border: 5px solid;
+}
+
+.tl-span-container {
+	display: grid;
+	min-width: 100px;
+	min-height: 100px;
+	width: auto;
+	height: auto;
+	position: relative;
+	overflow: auto;
+	z-index: 1!important;
+}
+
+.allow_resize {
+	resize: both;
+}
+
+.restrict_resize {
+	max-width: 100%;  /* Prevents resizing beyond container width */
+	max-height: 100%; /* Prevents resizing beyond container height */
+}
+
+.mx-dataview-content {
+	height: 100%;
+}
+
+.mx-dataview {
+	height: 100%;
+}
+
+/* Prevents the pen being randomly hidden on the whiteboard */
+.tl-svg-context {
+	overflow: unset!important;
+}
+
+svg:not(:root) {
+  overflow: unset!important;
+}
+
+/* Prevents text being hidden by a black background*/
+kbd {
+	background-color: transparent!important;
+    font-family: Inter, sans-serif!important;
+}
