@@ -40,15 +40,13 @@ class SnapshotToolbar extends Component {
 			console.error('Editor instance is not available.');
 			return;
 		}
-		
 		const { document, session } = getSnapshot(editor.store);
 		
 		if (!document) {
 			console.error('Document instance is not available.');
 			return;
 		}
-		const newValue = JSON.stringify({ document, session });
-		
+		const newValue = JSON.stringify({ document, session });		
 		
 		// Update local state to trigger Mendix object save
 		this.setState({ jsonSnapshot: newValue }, () => {
@@ -64,10 +62,7 @@ class SnapshotToolbar extends Component {
 		if (!snapshot) {
 			console.error('Refresh failed. Snapshot instance is not available.');
 			return;
-		}
-		console.info('loading');
-		console.info(whiteboardProps.value);
-				
+		}				
 		const snapshotCheck = whiteboardProps.value.value;	
 		loadSnapshot(editor.store, JSON.parse(snapshotCheck));
 	}
@@ -80,7 +75,7 @@ class SnapshotToolbar extends Component {
 				// Setting value in save function causes checkmark to not render
 				// so setting value has to be set here so re-render is not interrupted
 				this.props.whiteboardProps.value.setTextValue(this.state.jsonSnapshot);
-				}, 1500);
+				}, 1200);
 			}
 	}
 	
@@ -136,7 +131,7 @@ export class TlDrawComponent extends Component {
 		this.displayMode = this.props.whiteboardMode === "whiteboard_darkmode" ? "dark" : "light";
 		
 		this.userPreferences = {
-			id: "Mendix-user",  // A unique identifier for the user
+			id: "Mendix-user",  // Identifier for the user
 			colorScheme: this.displayMode, // Enables dark mode
 		};
 		this.mxObject = this.props.mxObject;
@@ -173,7 +168,6 @@ export class TlDrawComponent extends Component {
 			}
 		}
 		
-		    
 		this.cleanupFn = editor.store.listen(
 			debounce(() => {
 				const { document, session } = getSnapshot(editor.store)
@@ -205,7 +199,10 @@ export class TlDrawComponent extends Component {
 			this.cleanupFn.cancel(); // important for debounce/throttle
 		}
 		// Stops selected tool from presisting across app pages
-		localStorage.removeItem('selected-tool');
+		const savedTool = localStorage.getItem('selected-tool')
+			if (savedTool) {
+				localStorage.removeItem('selected-tool');
+			}
 	}	
 	
     render() {
@@ -216,8 +213,7 @@ export class TlDrawComponent extends Component {
 		let maxPagesInt = 1;
 		if(!this.props.disablePages){
 			maxPagesInt = 20;
-		}
-		
+		}		
 		
         return (
             <div className={classNames(this.props.whiteboardBorder, "tl-span-container", "alert-"+this.props.bootstrapStyle, this.props.restrictResize, this.props.allowResize)}
@@ -256,6 +252,7 @@ export class TlDrawComponent extends Component {
 				
 					onMount={(editor) => {
 						window.editor = editor;  // Make editor accessible globally
+						
 						editor.updateInstanceState({ isReadonly: this.props.readWhiteboard });
 						setUserPreferences(this.userPreferences);
 						const toolbarClass = "btn-" + this.props.bootstrapStyle;
@@ -287,7 +284,6 @@ export class TlDrawComponent extends Component {
 						// class may be removed if whiteboard is resized
 						const observer = new MutationObserver(applyClass);
 						observer.observe(document.body, { childList: true, subtree: true });
-
 						// Cleanup observer on unmount
 						return () => observer.disconnect();
 					}}
