@@ -1,4 +1,8 @@
 # InteractiveWhiteboardWidget - Version 1.0
+<p>
+  <img src="./WidgetLogo.PNG" alt="Widget logo showing the logos of Mendix and tldraw" height="120">
+  <img src="./WidgetExample.PNG" alt="Drawing of a tree on the tldraw whiteboard using the widget" height="120">
+</p>
 A Mendix widget which uses the tldraw whiteboard to provide an interactive whiteboard.
 
 ## Features
