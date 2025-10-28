@@ -60,13 +60,6 @@
 	max-height: 100%; /* Prevents resizing beyond container height */
 }
 
-.mx-dataview-content {
-	height: 100%;
-}
-
-.mx-dataview {
-	height: 100%;
-}
 
 /* Prevents the pen being randomly hidden on the whiteboard */
 .tl-svg-context {
