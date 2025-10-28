@@ -13,4 +13,5 @@ A Mendix widget which uses the tldraw whiteboard to provide an interactive white
 - Manual and automatic saving of your whiteboard so you can control when to save JSON data
 
 ### Important notes
-When updating the string attribute holding your JSON data, the widget will rerender the whiteboard, causing your toolbar selection and unndo features to reset. Take this into careful consideration when selecting auto update of whiteboard changes.
+When updating the string attribute holding your JSON data (controlled on the "Events" section and "On Change" option in the widget settings), the widget will rerender the whiteboard, causing your toolbar selection and undo features to reset. Take this into careful consideration when selecting auto update of whiteboard changes.
+Saving the whiteboard causes the Mendix object to refresh, causing the toolbar selections to reset. This has partially been resolved with the "Persist toolbar" option when using auto on updates to the whiteboard.
