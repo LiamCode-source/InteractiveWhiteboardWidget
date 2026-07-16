@@ -129,6 +129,40 @@ export class TlDrawComponent extends Component {
 			console.warn("Update interval cannot be less than 100ms. Defaulting to 1000ms");
 			this.props.updateInterval = 1000;
 		}
+
+		// Store created once and kept during widget lifetime
+		// Tldraw recreates its entire store whenever a snapshot recieves a new object
+		// Owning the store means Mendix triggered rerender (e.g. after save) does not impact editor state
+		// Only explicit loadSnapshot should reload widget
+		this.tlStore = createTLStore();
+
+		// valueAttribute can be a microflow source (async)
+		// so on first mount, value.status can be "loading" and force .readOnly
+		// Only trust value once it has loaded
+		this.hasLoadedInitialSnapshot = false;
+		if (this.props.value.status === "available") {
+			this.loadSnapshotFromValue();
+		}
+	}
+
+	loadSnapshotFromValue() {
+		if (this.props.value.value) {
+			loadSnapshot(this.tlStore, JSON.parse(this.props.value.value));
+		}
+		this.hasLoadedInitialSnapshot = true;
+	}
+
+	componentDidUpdate(prevProps) {
+		const becameAvailable = 
+			prevProps.value.status !== "available" && this.props.value.status === "available";
+
+		if (becameAvailable && !this.hasLoadedInitialSnapshot) {
+			this.loadSnapshotFromValue();
+		}
+
+		if (this.editor && prevProps.readWhiteboard !== this.props.readWhiteboard) {
+			this.editor.updateInstanceState({ isReadonly: this.props.readWhiteboard });
+		}
 	}
 
 	getStyle(value, type) {
@@ -159,6 +193,11 @@ export class TlDrawComponent extends Component {
 
 		this.cleanupFn = editor.store.listen(
 			debounce(() => {
+				if (!this.hasLoadedInitialSnapshot) {
+					// onMount fires before microflows may be available
+					// aims to prevent unnecessary/empty saves
+					return
+				}
 				const { document, session } = getSnapshot(editor.store)
 
 				if (!document || !session) {
@@ -194,10 +233,6 @@ export class TlDrawComponent extends Component {
 	}
 
     render() {
-		let initialJSON = "";
-		if (this.props.value.value !== undefined && this.props.value.value) {
-			initialJSON = JSON.parse(this.props.value.value);
-		}
 		let maxPagesInt = 1;
 		if (!this.props.disablePages) {
 			maxPagesInt = 20;
@@ -215,7 +250,7 @@ export class TlDrawComponent extends Component {
 					onPointerDown={(e) => e.stopPropagation()} // Ensures events go to Tldraw
 					performanceMode="high"
 
-					snapshot={initialJSON}
+					snapshot={this.tlStore}
 					options={{ maxPages: maxPagesInt }}
 
 					components={{
@@ -239,6 +274,8 @@ export class TlDrawComponent extends Component {
 
 					onMount={(editor) => {
 						window.editor = editor; // Make editor accessible globally
+						// Always captured so componentDidUpdate can reapply readOnly state once any MF finishes loading
+						this.editor = editor
 
 						editor.updateInstanceState({ isReadonly: this.props.readWhiteboard });
 						setUserPreferences(this.userPreferences);
