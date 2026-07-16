@@ -1,4 +1,4 @@
-# InteractiveWhiteboardWidget - Version 1.0
+# InteractiveWhiteboardWidget - Version 2.0
 <p>
   <img src="./WidgetLogo.PNG" alt="Widget logo showing the logos of Mendix and tldraw" height="120">
   <img src="./WidgetExample.PNG" alt="Drawing of a tree on the tldraw whiteboard using the widget" height="120">
@@ -12,6 +12,6 @@ A Mendix widget which uses the tldraw whiteboard to provide an interactive white
 - Regular bootstrap styling (info, danger, ...) to match familiar styling within Mendix
 - Manual and automatic saving of your whiteboard so you can control when to save JSON data
 
-### Important notes
+### Important notes for versions below 2.0
 When updating the string attribute holding your JSON data (controlled on the "Events" section and "On Change" option in the widget settings), the widget will rerender the whiteboard, causing your toolbar selection and undo features to reset. Take this into careful consideration when selecting auto update of whiteboard changes.
 Saving the whiteboard causes the Mendix object to refresh, causing the toolbar selections to reset. This has partially been resolved with the "Persist toolbar" option when using auto on updates to the whiteboard.
