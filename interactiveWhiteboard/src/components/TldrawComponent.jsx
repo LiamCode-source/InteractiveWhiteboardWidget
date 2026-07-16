@@ -250,7 +250,7 @@ export class TlDrawComponent extends Component {
 					onPointerDown={(e) => e.stopPropagation()} // Ensures events go to Tldraw
 					performanceMode="high"
 
-					snapshot={this.tlStore}
+					store={this.tlStore}
 					options={{ maxPages: maxPagesInt }}
 
 					components={{
